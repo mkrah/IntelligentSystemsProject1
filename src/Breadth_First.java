@@ -52,7 +52,7 @@ public class Breadth_First {
                     pathString = pathString + currPathNode.getNodeName() + " -> ";
                 }
                 System.out.println( pathString);
-                System.out.println(pathCost);
+				System.out.println("Total path cost: " + pathCost);
                 //TODO change this return as well.
                 return new String[2];
 
