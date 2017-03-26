@@ -1,9 +1,10 @@
-import com.sun.org.apache.xpath.internal.SourceTree;
-
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Stack;
+
 
 /**
  * This is the main class for running the BFS algorithm.
@@ -13,8 +14,6 @@ import java.util.Scanner;
  *
  */
 public class Breadth_First {
-	private static final String STARTNODE = "";
-	private static final String GOALNODE = "";
 	/*
 	 * This method runs the breadth first search algorithm on the tree
 	 * and returns a String array like this: [shortest_path, path_cost]
@@ -22,7 +21,57 @@ public class Breadth_First {
 	 * @param Tree structure
 	 * @return String[]
 	 */
-	private static String[] breadth_first_algorithm() {
+	private static String[] breadth_first_algorithm(Node startNode, Node goalNode, HashMap<String, Node> nodes) {
+
+	    //queue for BFS algorithm.
+	    ArrayDeque<Node> queue = new ArrayDeque<>();
+
+        queue.add(startNode);
+        //queue is ready, start looping.
+        while(!queue.isEmpty()){
+            Node currentNode = queue.pop();
+            //if(currentNode.getNodeName().equals(goalNodeName)){
+            if(currentNode == goalNode){
+                //goal node found.
+                int pathCost = currentNode.getPathCost();
+                Stack<Node> path = new Stack<>();
+
+                //Traverse from end node to start node, keeping the path in "path"
+                while(true){
+                    if(currentNode.getPreviousNode() == null){
+                        path.add(currentNode);
+                        break;
+                    }
+                    path.add(currentNode);
+                    currentNode = currentNode.getPreviousNode();
+                }
+                String pathString = "";
+                while(!path.isEmpty()){
+                    Node currPathNode = path.pop();
+                    //TODO: fix output to not have trailing arrow. Holding off on this until return type (if any) is finalized.
+                    pathString = pathString + currPathNode.getNodeName() + " -> ";
+                }
+                System.out.println( pathString);
+                System.out.println(pathCost);
+                //TODO change this return as well.
+                return new String[2];
+
+            }
+            //if(!currentNode.visited){//Kinda redundant, but keeping for now.
+            currentNode.visited = true;
+
+            //check all neighbors of currentNode. Add to queue if they are not visited.
+            //Mark them visited, and set their previous node and path cost.
+            for(Neighbor n : currentNode.getNeighborList()){
+                if(!n.getNodeReference().visited){
+                    n.getNodeReference().setPreviousNode(currentNode);
+                    n.getNodeReference().setPathCost( currentNode.getPathCost() + n.getPathCost());
+                    queue.add(n.getNodeReference());
+                }
+            }
+        }
+
+        //TODO potentially remove return, or change it somehow. All that needs to be done is printing the result.
 		return new String[2];
 	}
 	
@@ -37,9 +86,9 @@ public class Breadth_First {
 		//Get goal/start node names from user.
 		Scanner reader = new Scanner(System.in);
 		System.out.println("Enter start node: ");
-		String startNode = reader.next();
+		String startNodeName = reader.next();
 		System.out.println("Enter goal node: ");
-		String goalNode = reader.next();
+		String goalNodeName = reader.next();
 
 		// Load input
 		Scanner scanner = new Scanner(new File(args[0]));
@@ -83,7 +132,20 @@ public class Breadth_First {
 		
 		
 		// Run algorithm
-		String[] path_and_cost = breadth_first_algorithm();
+        Node startNode = nodes.get(startNodeName);
+        if(startNode == null){
+            System.err.println("Please enter a valid start node name");
+            System.exit(-1);
+        }
+
+        Node goalNode = nodes.get(goalNodeName);
+		if(goalNode == null){
+		    System.err.println("Please enter a valid goal node name");
+		    System.exit(-1);
+        }
+
+
+		String[] path_and_cost = breadth_first_algorithm(startNode, goalNode, nodes);
 		System.out.println("Shortest path: " + path_and_cost[0]);
 		System.out.println("Path cost: " + path_and_cost[1]);
 	}

@@ -10,6 +10,9 @@ public class Node {
 	private String nodeName;
 	private ArrayList<Neighbor> neighborList;
 	private int heuristicValue;
+	public boolean visited;
+	private Node previousNode;
+	private int pathCost;
 	
 	/*
 	 * Construct node object.
@@ -20,6 +23,7 @@ public class Node {
 		this.heuristicValue = heuristicValue;
 		nodeName = name;
 		neighborList = new ArrayList<>();
+		this.visited = false;
 	}
 	
 	/*
@@ -32,4 +36,22 @@ public class Node {
 	    neighborList.add(neighbor);
 
 	}
+	public Node getPreviousNode(){
+	    return this.previousNode;
+    }
+    public void setPreviousNode(Node n){
+	    this.previousNode = n;
+    }
+    public ArrayList<Neighbor> getNeighborList(){
+        return this.neighborList;
+    }
+    public String getNodeName(){
+        return this.nodeName;
+    }
+    public void setPathCost(int p){
+        this.pathCost = p;
+    }
+    public int getPathCost(){
+        return this.pathCost;
+    }
 }

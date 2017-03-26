@@ -13,4 +13,11 @@ public class Neighbor {
 	    nodeReference = n;
 	    pathCost = cost;
     }
+
+    public Node getNodeReference(){
+	    return this.nodeReference;
+    }
+    public int getPathCost(){
+        return this.pathCost;
+    }
 }
