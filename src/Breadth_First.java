@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -11,7 +13,8 @@ import java.util.Scanner;
  *
  */
 public class Breadth_First {
-
+	private static final String STARTNODE = "";
+	private static final String GOALNODE = "";
 	/*
 	 * This method runs the breadth first search algorithm on the tree
 	 * and returns a String array like this: [shortest_path, path_cost]
@@ -31,24 +34,27 @@ public class Breadth_First {
 	 * @throws FileNotFoundException 
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
+		//Get goal/start node names from user.
+		Scanner reader = new Scanner(System.in);
+		System.out.println("Enter start node: ");
+		String startNode = reader.next();
+		System.out.println("Enter goal node: ");
+		String goalNode = reader.next();
+
 		// Load input
 		Scanner scanner = new Scanner(new File(args[0]));
 		boolean neighbors = false;
-		boolean heuristics = false;
-		//ArrayList<Node> nodes = new ArrayList<Node>();
 		HashMap<String, Node> nodes = new HashMap<>();
 
+		//Read through file and generate map.
 		while(scanner.hasNext()){
 			String s = scanner.next();
 			s = s.trim();
 			if(s .equals("NEIGHBORS")){
 				neighbors = true;
-				System.out.println("TRUE!!!!!");
-			}
-			else if(heuristics){
-				//do something
 			}
 			else if(neighbors){
+				//Reading in list of neighbors
 				String[] splt = s.split(":");
 				String currNodeName = splt[0];
 
@@ -57,6 +63,7 @@ public class Breadth_First {
 					String neighborName = neighborValues[i];
 					int pathCost = Integer.parseInt(neighborValues[i+1]);
 
+					//Add Neighbor to existing Node.
 					nodes.get(currNodeName).addNeighbor(nodes.get(neighborName), pathCost);
 
 				}
@@ -65,15 +72,14 @@ public class Breadth_First {
 			else{
 				//Reading in node definitions
 				String[] splt = s.split(",");
-
 				Node n = new Node(splt[0],Integer.parseInt(splt[1]));
-
 				nodes.put( splt[0],n);
 			}
 			System.out.println(s);
 
 		}
-		// Build nodes and neighbors
+		// Done building nodes. They're all in "nodes" hashMap.
+
 		
 		
 		// Run algorithm
