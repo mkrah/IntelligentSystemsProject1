@@ -21,7 +21,7 @@ public class Breadth_First {
 	 * @param Tree structure
 	 * @return String[]
 	 */
-	private static String[] breadth_first_algorithm(Node startNode, Node goalNode, HashMap<String, Node> nodes) {
+	private static void breadth_first_algorithm(Node startNode, Node goalNode) {
 
 	    //queue for BFS algorithm.
 	    ArrayDeque<Node> queue = new ArrayDeque<>();
@@ -45,19 +45,20 @@ public class Breadth_First {
                     path.add(currentNode);
                     currentNode = currentNode.getPreviousNode();
                 }
-                String pathString = "";
-                while(!path.isEmpty()){
-                    Node currPathNode = path.pop();
-                    //TODO: fix output to not have trailing arrow. Holding off on this until return type (if any) is finalized.
-                    pathString = pathString + currPathNode.getNodeName() + " -> ";
-                }
-                System.out.println( pathString);
+				//Print output
+				String pathString = "";
+				String sep = "";
+				while (!path.isEmpty()) {
+					Node currPathNode = path.pop();
+					pathString = pathString + sep + currPathNode.getNodeName();
+					sep = " -> ";
+				}
+				System.out.println(pathString);
 				System.out.println("Total path cost: " + pathCost);
-                //TODO change this return as well.
-                return new String[2];
+
+				return;
 
             }
-            //if(!currentNode.visited){//Kinda redundant, but keeping for now.
             currentNode.visited = true;
 
             //check all neighbors of currentNode. Add to queue if they are not visited.
@@ -71,8 +72,6 @@ public class Breadth_First {
             }
         }
 
-        //TODO potentially remove return, or change it somehow. All that needs to be done is printing the result.
-		return new String[2];
 	}
 	
 	
@@ -124,7 +123,7 @@ public class Breadth_First {
 				Node n = new Node(splt[0],Integer.parseInt(splt[1]));
 				nodes.put( splt[0],n);
 			}
-			System.out.println(s);
+			//System.out.println(s);
 
 		}
 		// Done building nodes. They're all in "nodes" hashMap.
@@ -145,9 +144,7 @@ public class Breadth_First {
         }
 
 
-		String[] path_and_cost = breadth_first_algorithm(startNode, goalNode, nodes);
-		System.out.println("Shortest path: " + path_and_cost[0]);
-		System.out.println("Path cost: " + path_and_cost[1]);
+		breadth_first_algorithm(startNode, goalNode);
 	}
 
 }

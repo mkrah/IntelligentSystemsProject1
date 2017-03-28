@@ -21,7 +21,7 @@ public class Backtracking {
 	 * @param Tree structure
 	 * @return String[]
 	 */
-	private static String[] backtracking_algorithm(Node startNode, Node goalNode) {
+	private static void backtracking_algorithm(Node startNode, Node goalNode) {
 
         //queue for BFS algorithm.
         //ArrayDeque<Node> queue = new ArrayDeque<>();
@@ -45,19 +45,21 @@ public class Backtracking {
                     path.add(currentNode);
                     currentNode = currentNode.getPreviousNode();
                 }
+
+                //Print output
                 String pathString = "";
+                String sep = "";
                 while (!path.isEmpty()) {
                     Node currPathNode = path.pop();
-                    //TODO: fix output to not have trailing arrow. Holding off on this until return type (if any) is finalized.
-                    pathString = pathString + currPathNode.getNodeName() + " -> ";
+                    pathString = pathString + sep + currPathNode.getNodeName();
+					sep = " -> ";
                 }
                 System.out.println(pathString);
                 System.out.println("Total path cost: " + pathCost);
-                //TODO change this return as well.
-                return new String[2];
+
+				return;
 
             }
-            //if(!currentNode.visited){//Kinda redundant, but keeping for now.
             currentNode.visited = true;
 
             //check all neighbors of currentNode. Add to queue if they are not visited.
@@ -70,9 +72,6 @@ public class Backtracking {
                 }
             }
         }
-
-        //TODO potentially remove return, or change it somehow. All that needs to be done is printing the result.
-        return new String[2];
     }
 
 
@@ -146,12 +145,13 @@ public class Backtracking {
 			System.err.println("Please enter a valid goal node name");
 			System.exit(-1);
 		}
-
+		// Close scanners
+		reader.close();
+		scanner.close();
 
 		// Run algorithm
-		String[] path_and_cost = backtracking_algorithm(startNode, goalNode);
-		System.out.println("Shortest path: " + path_and_cost[0]);
-		System.out.println("Path cost: " + path_and_cost[1]);
+		backtracking_algorithm(startNode, goalNode);
+
 	}
 
 }
